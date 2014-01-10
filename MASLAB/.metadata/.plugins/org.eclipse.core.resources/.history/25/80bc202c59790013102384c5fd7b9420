@@ -1,0 +1,31 @@
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+
+public class ImageProcessor {
+	
+	static {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+
+	// Input: an image from the camera
+	// Output: the OpenCV-processed image
+	
+	// (In practice it's a little different:
+	//  the output image will be for your visual reference,
+	//  but you will mainly want to output a list of the locations of detected objects.)
+	public static Mat process(Mat rawImage) {
+		Mat procImage = new Mat();
+		Mat convMat = new Mat(rawImage.size(), rawImage.type());
+        Imgproc.cvtColor(rawImage, convMat, Imgproc.COLOR_BGR2HSV);
+        byte[] dat;
+		convMat.get(0, 0, dat);
+        Mat procImage.getRaster().setDataElements(0, 0, procImage.getWidth(), procImage.getHeight(), dat);
+        return procImage;
+		Imgproc.blur(rawImage, procImage, new Size(9, 9));
+		return procImage;
+	}
+	
+}
